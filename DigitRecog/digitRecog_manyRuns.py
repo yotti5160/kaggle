@@ -28,11 +28,10 @@ test = test / 255.0
 # Reshape
 X_train = X_train.values.reshape(-1,28,28,1)
 test = test.values.reshape(-1,28,28,1)
-print("x_train shape: ",X_train.shape)
-print("test shape: ",test.shape)
+#print("x_train shape: ",X_train.shape)
+#print("test shape: ",test.shape)
 
 Y_train = to_categorical(Y_train, num_classes = 10)
-
 
 
 for NumberOfRun in range(1):
@@ -52,7 +51,6 @@ for NumberOfRun in range(1):
     model.add(BatchNormalization())
     model.add(Dropout(0.4))
     
-    
     model.add(Conv2D(64, (3,3), activation ='relu'))
     model.add(BatchNormalization())
     model.add(Conv2D(64, (3,3), activation ='relu'))
@@ -67,21 +65,16 @@ for NumberOfRun in range(1):
     model.add(Dropout(0.4))
     model.add(Dense(10, activation = "softmax"))
     
-    # Compile the model
     model.compile(optimizer = 'adam' , loss = "categorical_crossentropy", metrics=["accuracy"])
     
     # DECREASE LEARNING RATE EACH EPOCH
     annealer = LearningRateScheduler(lambda x: 1e-3 * 0.95 ** x)
     
-    epochs = 45  # for better result increase the epochs
+    epochs = 45
     batch_size = 200
     
     # data augmentation
-    datagen = ImageDataGenerator(
-            rotation_range=10,  # randomly rotate images in the range 5 degrees
-            zoom_range = 0.1, # Randomly zoom image 5%
-            width_shift_range=0.1,  # randomly shift images horizontally 5%
-            height_shift_range=0.1)  # randomly shift images vertically 5%
+    datagen = ImageDataGenerator(rotation_range=10, zoom_range = 0.1, width_shift_range=0.1, height_shift_range=0.1)
     
     datagen.fit(X_train)
     
@@ -92,7 +85,7 @@ for NumberOfRun in range(1):
     result=model.predict(test)
     result=np.argmax(result, axis=1)
     
-    f=open('C:/Users/Yotti/Desktop/digit_recongnizer/output_0129_'+str(NumberOfRun)+'.csv', 'w')
+    f=open('C:/Users/Yotti/Desktop/digit_recongnizer/digitRecog_'+str(NumberOfRun)+'.csv', 'w')
     f.write('ImageId,Label\n')
     for i in range(len(result)):
         f.write(str(i+1)+','+str(result[i])+'\n')
