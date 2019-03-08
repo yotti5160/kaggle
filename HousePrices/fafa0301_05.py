@@ -2,20 +2,15 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-from sklearn import ensemble, tree, linear_model
+from sklearn import ensemble
 from sklearn.model_selection import train_test_split, cross_val_score
-from sklearn.metrics import r2_score, mean_squared_error
-from sklearn.utils import shuffle
-from scipy.stats import norm
+from sklearn.metrics import mean_squared_error
 from sklearn.preprocessing import StandardScaler
-from scipy import stats
 from sklearn.feature_selection import SelectKBest, f_regression
+from math import sqrt
 
 
-#%matplotlib inline
-import warnings
-warnings.filterwarnings('ignore')
-
+# feature importance sorted by correlation with Saleprice
 featureArray_Sorted=['TotalSF', 'OverallQual', 'GrLivArea', 'GarageCars', 'GarageArea', 'TotalBath', 'ExterQual', 'TotRmsAbvGrd', 'YearBuilt', 'KitchenQual', 'YearRemodAdd', 'Foundation', 'Fireplaces', 'HeatingQC', 'BsmtFinSF1', 'Neighborhood', 'SaleType', 'SaleCondition', 'WoodDeckSF', 'OpenPorchSF', 'Exterior2nd', 'Exterior1st', 'MSZoning', 'LotArea', 'LotShape', 'CentralAir', 'HouseStyle', 'Electrical', 'RoofStyle', 'PavedDrive', 'BsmtUnfSF', 'RoofMatl', 'BedroomAbvGr', 'LotConfig', 'ExterCond', 'BldgType', 'KitchenAbvGr', 'EnclosedPorch', 'LandContour', 'Condition1', 'Functional', 'ScreenPorch', 'PoolArea', 'Heating', 'MSSubClass', 'OverallCond', 'Condition2', 'LandSlope', 'MoSold', '3SsnPorch', 'Street', 'YrSold', 'LowQualFinSF', 'MiscVal', 'Utilities', 'BsmtFinSF2']
 
 def changeDtypes(df):
@@ -107,21 +102,11 @@ def DF_k_features(df, k):
 trainingData = pd.read_csv('C:/Users/Yotti/Desktop/homePrice/train.csv')
 testingData = pd.read_csv('C:/Users/Yotti/Desktop/homePrice/test.csv')
 
-#print(trainingData.dtypes)
-#print(train['SalePrice'].describe())
-#sns.distplot(trainingData['SalePrice'])
-#print(train.head())
 
-#sns.relplot(x='GrLivArea', y='SalePrice', data=trainingData)
-#sns.relplot(x='TotalBsmtSF', y='SalePrice', data=trainingData)
-
-#print(trainingData.isnull().sum().sort_values(ascending=False))
-
-
-#missing data
-total = trainingData.isnull().sum().sort_values(ascending=False)
-percent = (trainingData.isnull().sum()/1460).sort_values(ascending=False)
-missing_data = pd.concat([total, percent], axis=1, keys=['Total', 'Percent'])
+##missing data
+#total = trainingData.isnull().sum().sort_values(ascending=False)
+#percent = (trainingData.isnull().sum()/1460).sort_values(ascending=False)
+#missing_data = pd.concat([total, percent], axis=1, keys=['Total', 'Percent'])
 #print(missing_data.head(25))
 
 ##drop some column
@@ -131,7 +116,7 @@ trainingData = trainingData.drop(trainingData.loc[trainingData['Electrical'].isn
 
 testingData=testingData.drop(['PoolQC', 'MiscFeature', 'Alley', 'Fence','FireplaceQu','LotFrontage','GarageCond','GarageType','GarageYrBlt','GarageFinish','GarageQual','BsmtExposure','BsmtFinType2','BsmtFinType1','BsmtCond','BsmtQual','MasVnrArea','MasVnrType',], axis=1)
 
-#deleting points
+#deleting outliers
 trainingData = trainingData.drop(trainingData[trainingData['Id'] == 1299].index)
 trainingData = trainingData.drop(trainingData[trainingData['Id'] == 524].index)
 
@@ -184,8 +169,8 @@ new_train_Y=tmpTrainingData[['SalePrice']]
 new_train_Y=np.log(new_train_Y)
 
 
-#choose features
-numOfFeatures=70
+#choose features (total of 56 features)
+numOfFeatures=56
 new_train_X=DF_k_features(tmpTrainingData, numOfFeatures)
 new_test=DF_k_features(tmpTestingData, numOfFeatures)
 
@@ -205,17 +190,6 @@ GBR = ensemble.GradientBoostingRegressor(n_estimators=3000, learning_rate=0.05, 
 
 y_pred = GBR.predict(x_test)
 
-##transform 
-#y_pred=np.exp(y_pred)
-#y_test=np.exp(y_test)
-#
-##evaluate kaggle score
-#y_test['log_value'] = np.log(y_test['SalePrice'])
-#new_y_test=y_test[['log_value']]
-#
-#y_pred=np.log(y_pred)
-
-from math import sqrt
 
 rms = sqrt(mean_squared_error(y_test, y_pred))
 print(rms)
@@ -246,7 +220,7 @@ result = GBR.predict(new_test)
 result=np.exp(result)
 
 ## Saving to CSV
-pd.DataFrame({'Id': testingData.Id, 'SalePrice': result}).to_csv('C:/Users/Yotti/Desktop/homePrice/2019-0303xxx.csv', index =False)    
+pd.DataFrame({'Id': testingData.Id, 'SalePrice': result}).to_csv('C:/Users/Yotti/Desktop/homePrice/pred001.csv', index =False)    
 
 
 
