@@ -6,4 +6,4 @@ First clean data, drop some columns with too many missing data and fill missing 
 Adding some combined attributes, then use correlation of each column and saleprice to sort the importance of each feature.   
 Finally, use cross validation to choose attributes needed, and train with whole training data.   
 
-Score of final model: 0.138
+Score of final model: 0.13510
