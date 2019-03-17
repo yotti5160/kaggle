@@ -6,4 +6,4 @@ First clean data, drop some columns with too many missing data and fill missing 
 Adding some combined attributes, change data types.   
 Finally, train with whole training data.   
 
-Score of final model: 0.12290
+Score of final model: 0.12181
