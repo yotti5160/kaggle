@@ -1,11 +1,9 @@
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn import ensemble
-from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
-from sklearn.preprocessing import StandardScaler
 from math import sqrt
 
 pd.set_option('display.max_rows', 300)
@@ -146,7 +144,18 @@ testingData["KitchenQual"] = testingData["KitchenQual"].map({"Ex":5, "Gd":4, "TA
 trainingData['MSSubClass'] = trainingData['MSSubClass'].astype(str)
 
 
+##check for outliers
+#col=['GrLivArea', 'TotalSF']
+#for c in col:
+#    sns.relplot(x=c, y='SalePrice', data=trainingData)
+#
+#print(trainingData.shape)
+trainingData.drop(trainingData[(trainingData['GrLivArea']>4000) & (trainingData['SalePrice']<300000)].index, inplace = True) 
 
+#for c in col:
+#    sns.relplot(x=c, y='SalePrice', data=trainingData)
+#    
+#print(trainingData.shape)
 
 
 
@@ -191,6 +200,7 @@ y_pred = GBR.predict(x_test)
 
 rms = sqrt(mean_squared_error(y_test, y_pred))
 print(rms)
+
 
 
     
