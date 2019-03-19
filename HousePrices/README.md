@@ -4,6 +4,6 @@ Given a set of labeled data of house prices, build a gradient boosting regressor
 
 First clean data, drop some columns with too many missing data and fill missing data according to data description.   
 Adding some combined attributes, change data types and drop a few outliers.   
-Finally, train with whole training data.   
+Finally, train with whole training data with uniform blending.  
 
-Score of final model: 0.12047
+Score of final model: 0.11938
