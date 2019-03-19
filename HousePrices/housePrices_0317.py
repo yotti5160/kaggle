@@ -228,7 +228,3 @@ pd.DataFrame({'Id': testingData.Id, 'SalePrice': result}).to_csv('C:/Users/Yotti
 
 
 
-
-
-
-
