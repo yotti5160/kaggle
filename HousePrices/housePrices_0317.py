@@ -186,43 +186,41 @@ new_test_X=tmp_all[len_train_x:]
 
 
 
-# Splitting
-x_train, x_test, y_train, y_test = train_test_split(new_train_X, new_train_Y, test_size=0.1, random_state=1)
+## Splitting
+#x_train, x_test, y_train, y_test = train_test_split(new_train_X, new_train_Y, test_size=0.1)
+#
+#GBR = ensemble.GradientBoostingRegressor(n_estimators=3000, learning_rate=0.05, max_depth=3, max_features='sqrt',
+#                                               min_samples_leaf=15, min_samples_split=10, loss='huber').fit(x_train, y_train)
+#
+#
+##print(GBR.score(x_test, y_test))
+#
+#y_pred = GBR.predict(x_test)
+#
+#
+#rms = sqrt(mean_squared_error(y_test, y_pred))
+#print(rms)
 
-GBR = ensemble.GradientBoostingRegressor(n_estimators=5000, learning_rate=0.05, max_depth=3, max_features='sqrt',
-                                               min_samples_leaf=15, min_samples_split=10, loss='huber').fit(x_train, y_train)
 
 
-#print(GBR.score(x_test, y_test))
-
-y_pred = GBR.predict(x_test)
-
-
-rms = sqrt(mean_squared_error(y_test, y_pred))
-print(rms)
-
-
-
-    
 #retraining with whole training data
-GBR = ensemble.GradientBoostingRegressor(n_estimators=5000, learning_rate=0.05, max_depth=3, max_features='sqrt',
-                                               min_samples_leaf=15, min_samples_split=10, loss='huber').fit(new_train_X, new_train_Y)
-
-
-# Getting our SalePrice estimation
-result = GBR.predict(new_test_X)
-#transform 
-result=np.exp(result)
+numberOfModel=30
+box=[]
+result=np.zeros(new_test_X.shape[0])
+for i in range(numberOfModel):
+    GBR = ensemble.GradientBoostingRegressor(n_estimators=3000, learning_rate=0.05, max_depth=3, max_features='sqrt',
+                                                   min_samples_leaf=15, min_samples_split=10, loss='huber').fit(new_train_X, new_train_Y)
+    box.append(GBR)    
+    # Getting our SalePrice estimation
+    tmp = GBR.predict(new_test_X)
+    #transform 
+    tmp=np.exp(tmp)
+    result=result+tmp
+    print('Model number: ', i, ' completes.')
+    
+result=result/numberOfModel
 
 ## Saving to CSV
 pd.DataFrame({'Id': testingData.Id, 'SalePrice': result}).to_csv('C:/Users/Yotti/Desktop/homePrice/pred0317-01.csv', index =False)    
-
-
-
-
-
-
-
-
 
 
