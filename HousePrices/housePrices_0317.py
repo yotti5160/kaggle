@@ -170,7 +170,7 @@ test_X=testingData.drop(['Id'], axis=1)
 
 
 #log transform
-new_train_Y=np.log(train_Y)
+new_train_Y=np.log1p(train_Y)
 
 
 
@@ -214,7 +214,7 @@ for i in range(numberOfModel):
     # Getting our SalePrice estimation
     tmp = GBR.predict(new_test_X)
     #transform 
-    tmp=np.exp(tmp)
+    tmp=np.expm1(tmp)
     result=result+tmp
     print('Model number: ', i, ' completes.')
     
@@ -222,5 +222,13 @@ result=result/numberOfModel
 
 ## Saving to CSV
 pd.DataFrame({'Id': testingData.Id, 'SalePrice': result}).to_csv('C:/Users/Yotti/Desktop/homePrice/pred0317-01.csv', index =False)    
+
+
+
+
+
+
+
+
 
 
