@@ -142,6 +142,7 @@ testingData["KitchenQual"] = testingData["KitchenQual"].map({"Ex":5, "Gd":4, "TA
 
 #change dtypes
 trainingData['MSSubClass'] = trainingData['MSSubClass'].astype(str)
+testingData['MSSubClass'] = testingData['MSSubClass'].astype(str)
 
 
 ##check for outliers
