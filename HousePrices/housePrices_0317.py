@@ -144,7 +144,6 @@ testingData["KitchenQual"] = testingData["KitchenQual"].map({"Ex":5, "Gd":4, "TA
 trainingData['MSSubClass'] = trainingData['MSSubClass'].astype(str)
 testingData['MSSubClass'] = testingData['MSSubClass'].astype(str)
 
-
 ##check for outliers
 #col=['GrLivArea', 'TotalSF']
 #for c in col:
@@ -223,8 +222,6 @@ result=result/numberOfModel
 
 ## Saving to CSV
 pd.DataFrame({'Id': testingData.Id, 'SalePrice': result}).to_csv('C:/Users/Yotti/Desktop/homePrice/pred0317-01.csv', index =False)    
-
-
 
 
 
