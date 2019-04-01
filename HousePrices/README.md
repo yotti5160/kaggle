@@ -6,4 +6,4 @@ First clean data, drop some columns with too many missing data and fill missing 
 Adding some combined attributes, change data types and drop a few outliers.   
 Finally, train with whole training data with uniform blending.  
 
-Score of final model: 0.11810
+Score of final model: 0.11809
