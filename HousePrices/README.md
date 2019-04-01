@@ -1,4 +1,5 @@
-中文介紹請看HousePrices.PDF   
+中文介紹請看HousePrices.PDF檔
+
 Kaggle: https://www.kaggle.com/c/house-prices-advanced-regression-techniques   
 
 Given a set of labeled data of house prices, build a gradient boosting regressor to predict the house prices of another set of data.   
