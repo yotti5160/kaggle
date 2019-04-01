@@ -6,7 +6,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 from math import sqrt
 
-pd.set_option('display.max_rows', 300)
 
 trainingData = pd.read_csv('C:/Users/Yotti/Desktop/homePrice/train.csv')
 testingData = pd.read_csv('C:/Users/Yotti/Desktop/homePrice/test.csv')
