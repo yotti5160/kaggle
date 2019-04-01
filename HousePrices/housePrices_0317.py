@@ -187,7 +187,7 @@ new_test_X=tmp_all[len_train_x:]
 
 
 ## Splitting
-#x_train, x_test, y_train, y_test = train_test_split(new_train_X, new_train_Y, test_size=0.1)
+#x_train, x_test, y_train, y_test = train_test_split(new_train_X, new_train_Y, test_size=0.5)
 #
 #GBR = ensemble.GradientBoostingRegressor(n_estimators=3000, learning_rate=0.05, max_depth=3, max_features='sqrt',
 #                                               min_samples_leaf=15, min_samples_split=10, loss='huber').fit(x_train, y_train)
