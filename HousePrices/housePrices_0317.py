@@ -6,6 +6,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 from math import sqrt
 
+pd.set_option('display.max_rows', 300)
 
 trainingData = pd.read_csv('C:/Users/Yotti/Desktop/homePrice/train.csv')
 testingData = pd.read_csv('C:/Users/Yotti/Desktop/homePrice/test.csv')
@@ -14,7 +15,7 @@ testingData = pd.read_csv('C:/Users/Yotti/Desktop/homePrice/test.csv')
 #total = trainingData.isnull().sum().sort_values(ascending=False)
 #percent = (trainingData.isnull().sum()/trainingData.shape[0]).sort_values(ascending=False)
 #missing_data = pd.concat([total, percent], axis=1, keys=['Total', 'Percent'])
-#print(missing_data.head(25))
+#print(missing_data.head(20))
 
 columnsToDrop=['PoolQC', 'MiscFeature', 'Alley', 'Fence', 'FireplaceQu', 'LotFrontage']
 trainingData.drop(columnsToDrop, axis=1, inplace=True)
@@ -143,6 +144,7 @@ testingData["KitchenQual"] = testingData["KitchenQual"].map({"Ex":5, "Gd":4, "TA
 trainingData['MSSubClass'] = trainingData['MSSubClass'].astype(str)
 testingData['MSSubClass'] = testingData['MSSubClass'].astype(str)
 
+
 ##check for outliers
 #col=['GrLivArea', 'TotalSF']
 #for c in col:
@@ -150,7 +152,7 @@ testingData['MSSubClass'] = testingData['MSSubClass'].astype(str)
 #
 #print(trainingData.shape)
 trainingData.drop(trainingData[(trainingData['GrLivArea']>4000) & (trainingData['SalePrice']<300000)].index, inplace = True) 
-
+#
 #for c in col:
 #    sns.relplot(x=c, y='SalePrice', data=trainingData)
 #    
@@ -168,9 +170,6 @@ test_X=testingData.drop(['Id'], axis=1)
 #print(train_Y.shape)
 
 
-#log transform
-new_train_Y=np.log1p(train_Y)
-
 
 
 
@@ -184,21 +183,30 @@ new_train_X=tmp_all[:len_train_x]
 new_test_X=tmp_all[len_train_x:]
 
 
+#Set model
+GBR = ensemble.GradientBoostingRegressor(n_estimators=3000, learning_rate=0.05, max_depth=3, max_features='sqrt',
+                                         min_samples_leaf=10, loss='huber')
+#training error
+GBR.fit(new_train_X, train_Y)
+y_pred = GBR.predict(new_train_X)
+y_pred=np.log(y_pred)
+log_Y=np.log(train_Y)
+rms = sqrt(mean_squared_error(y_pred, log_Y))
+print('TE: ', rms)
 
-## Splitting
-#x_train, x_test, y_train, y_test = train_test_split(new_train_X, new_train_Y, test_size=0.5)
-#
-#GBR = ensemble.GradientBoostingRegressor(n_estimators=3000, learning_rate=0.05, max_depth=3, max_features='sqrt',
-#                                         min_samples_leaf=15, loss='huber').fit(x_train, y_train)
-#
-#
-##print(GBR.score(x_test, y_test))
-#
-#y_pred = GBR.predict(x_test)
-#
-#
-#rms = sqrt(mean_squared_error(y_test, y_pred))
-#print(rms)
+
+# Splitting
+x_train, x_test, y_train, y_test = train_test_split(new_train_X, train_Y, test_size=0.5)
+
+GBR.fit(x_train, y_train)
+y_pred = GBR.predict(x_test)
+y_pred=np.log(y_pred)
+y_test=np.log(y_test)
+
+rms = sqrt(mean_squared_error(y_test, y_pred))
+print('CV: ', rms)
+
+
 
 
 
@@ -208,12 +216,10 @@ box=[]
 result=np.zeros(new_test_X.shape[0])
 for i in range(numberOfModel):
     GBR = ensemble.GradientBoostingRegressor(n_estimators=3000, learning_rate=0.05, max_depth=3, max_features='sqrt',
-                                             min_samples_leaf=15, loss='huber').fit(new_train_X, new_train_Y)
+                                             min_samples_leaf=10, loss='huber').fit(new_train_X, train_Y)
     box.append(GBR)    
     # Getting our SalePrice estimation
     tmp = GBR.predict(new_test_X)
-    #transform 
-    tmp=np.expm1(tmp)
     result=result+tmp
     print('Model number: ', i, ' completes.')
     
