@@ -190,7 +190,7 @@ new_test_X=tmp_all[len_train_x:]
 #x_train, x_test, y_train, y_test = train_test_split(new_train_X, new_train_Y, test_size=0.5)
 #
 #GBR = ensemble.GradientBoostingRegressor(n_estimators=3000, learning_rate=0.05, max_depth=3, max_features='sqrt',
-#                                               min_samples_leaf=15, min_samples_split=10, loss='huber').fit(x_train, y_train)
+#                                         min_samples_leaf=15, loss='huber').fit(x_train, y_train)
 #
 #
 ##print(GBR.score(x_test, y_test))
@@ -209,7 +209,7 @@ box=[]
 result=np.zeros(new_test_X.shape[0])
 for i in range(numberOfModel):
     GBR = ensemble.GradientBoostingRegressor(n_estimators=3000, learning_rate=0.05, max_depth=3, max_features='sqrt',
-                                                   min_samples_leaf=15, min_samples_split=10, loss='huber').fit(new_train_X, new_train_Y)
+                                             min_samples_leaf=15, loss='huber').fit(new_train_X, new_train_Y)
     box.append(GBR)    
     # Getting our SalePrice estimation
     tmp = GBR.predict(new_test_X)
@@ -221,7 +221,7 @@ for i in range(numberOfModel):
 result=result/numberOfModel
 
 ## Saving to CSV
-pd.DataFrame({'Id': testingData.Id, 'SalePrice': result}).to_csv('C:/Users/Yotti/Desktop/homePrice/pred0317-01.csv', index =False)    
+pd.DataFrame({'Id': testingData.Id, 'SalePrice': result}).to_csv('C:/Users/Yotti/Desktop/homePrice/pred0328-01.csv', index =False)    
 
 
 
