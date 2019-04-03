@@ -9,11 +9,11 @@ from keras.utils.np_utils import to_categorical
 from keras.preprocessing.image import ImageDataGenerator
 
 
-# read train 
-train = pd.read_csv("C:/Users/Yotti/Desktop/digit_recongnizer/train.csv")
+# read training data 
+train = pd.read_csv("C:/Users/.../train.csv")
 
-# read test 
-test= pd.read_csv("C:/Users/Yotti/Desktop/digit_recongnizer/test.csv")
+# read testing data
+test= pd.read_csv("C:/Users/.../test.csv")
 
 # put labels into y_train variable
 Y_train = train["label"]
@@ -38,7 +38,7 @@ X_train, X_val, Y_train, Y_val = train_test_split(X_train, Y_train, test_size = 
 
 model = Sequential()
 
-model.add(Conv2D(32, (3,3), activation ='relu', input_shape = (28,28,1)))
+model.add(Conv2D(32, (5,5), activation ='relu', input_shape = (28,28,1)))
 model.add(MaxPool2D(pool_size=2))
 model.add(BatchNormalization())
 model.add(Dropout(0.25))
@@ -64,21 +64,21 @@ model.compile(optimizer = 'adam' , loss = "categorical_crossentropy", metrics=["
 
 # data augmentation
 datagen = ImageDataGenerator(
-        rotation_range=10,  # randomly rotate images in the range 5 degrees
+        rotation_range=10, # randomly rotate images in the range 5 degrees
         zoom_range = 0.1, # Randomly zoom image 5%
-        width_shift_range=0.1,  # randomly shift images horizontally 5%
-        height_shift_range=0.1)  # randomly shift images vertically 5%
+        width_shift_range=0.1, # randomly shift images horizontally 5%
+        height_shift_range=0.1) # randomly shift images vertically 5%
 
 datagen.fit(X_train)
 
 # Fit the model
 model_fited = model.fit_generator(datagen.flow(X_train,Y_train, batch_size=200),
-                                  epochs = 45, validation_data = (X_val,Y_val), steps_per_epoch=X_train.shape[0] // 200)
+                                  epochs = 40, validation_data = (X_val,Y_val), steps_per_epoch=X_train.shape[0] // 200)
 
 result=model.predict(test)
 result=np.argmax(result, axis=1)
 
 result = pd.Series(result, name="Label")
 submit = pd.concat([pd.Series(range(1,28001),name = "ImageId"),result],axis = 1)
-submit.to_csv("C:/Users/Yotti/Desktop/digit_recongnizer/output_01.csv",index=False)
+submit.to_csv("C:/Users/.../output.csv",index=False)
 
