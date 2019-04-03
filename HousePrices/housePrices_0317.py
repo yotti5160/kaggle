@@ -6,10 +6,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 from math import sqrt
 
-pd.set_option('display.max_rows', 300)
 
-trainingData = pd.read_csv('C:/Users/Yotti/Desktop/homePrice/train.csv')
-testingData = pd.read_csv('C:/Users/Yotti/Desktop/homePrice/test.csv')
+trainingData = pd.read_csv('C:/Users/.../train.csv')
+testingData = pd.read_csv('C:/Users/.../test.csv')
 
 ##missing data
 #total = trainingData.isnull().sum().sort_values(ascending=False)
@@ -226,7 +225,7 @@ for i in range(numberOfModel):
 result=result/numberOfModel
 
 ## Saving to CSV
-pd.DataFrame({'Id': testingData.Id, 'SalePrice': result}).to_csv('C:/Users/Yotti/Desktop/homePrice/pred0328-01.csv', index =False)    
+pd.DataFrame({'Id': testingData.Id, 'SalePrice': result}).to_csv('C:/Users/.../output.csv', index =False)    
 
 
 
