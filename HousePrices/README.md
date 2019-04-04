@@ -1,5 +1,5 @@
 ## Kaggle House Prices
-中文介紹請看HousePrices.PDF檔
+中文介紹請看HousePrices.檔
 
 Kaggle: https://www.kaggle.com/c/house-prices-advanced-regression-techniques   
 
