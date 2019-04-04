@@ -1,5 +1,5 @@
 ## Kaggle Digit Recognizer 
-中文介紹請參考DigitRec.pdf
+中文介紹請看DigitRec.pdf
 
 Kaggle: https://www.kaggle.com/c/digit-recognizer   
 
